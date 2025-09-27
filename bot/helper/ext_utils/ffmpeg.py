@@ -12,25 +12,10 @@ LOGGER = logging.getLogger(__name__)
 
 ########-------- Metadata -------------#########
 async def edit_metadata(listener, base_dir: str, media_file: str, outfile: str, metadata: str = ''):
-    cmd = [
-        bot_cache['pkgs'][2], '-hide_banner', '-ignore_unknown', '-i', media_file,
-        '-metadata', f'title={metadata}',
-        '-metadata:s:v', f'title={metadata}',
-        '-metadata', f'Comment=𝗦𝗘𝗔𝗥𝗖𝗛 𝗢𝗡 𝗧𝗘𝗟𝗘𝗚𝗥𝗔𝗠 - @𝗔𝗗𝗗𝗔𝗙𝗜𝗟𝗘𝗦',
-        '-metadata', f'Copyright= ',
-        '-metadata', f'AUTHOR=𝗔𝗗𝗔 𝗙𝗜𝗟𝗘𝗦',
-        '-metadata', f'Encoded by=𝗔𝗗𝗔 𝗙𝗜𝗟𝗘𝗦',
-        '-metadata', f'Encoded_by=@𝗔𝗗𝗗𝗔𝗙𝗜𝗟𝗘𝗦',
-        '-metadata', f'Description= ',
-        '-metadata', f'description= ',
-        '-metadata', f'SUMMARY= ',
-        '-metadata', f'WEBSITE= ',
-        '-metadata:s:a', f'title={metadata}',
-        '-metadata:s:s', f'title={metadata}',
-        '-map', '0:v:0?', '-map', '0:a:?', '-map', '0:s:?',
-        '-c:v', 'copy', '-c:a', 'copy', '-c:s', 'copy',
-        outfile, '-y'
-    ]
+    cmd = [bot_cache['pkgs'][2], '-hide_banner', '-loglevel', 'error', '-ignore_unknown', '-i', media_file, '-metadata', f'title={metadata}',
+           '-metadata:s:v', f'title={metadata}', '-metadata', 'Comment=', '-metadata', f'Copyright={metadata}', '-metadata', f'AUTHOR=@𝗔𝗗𝗗𝗔_𝗙𝗜𝗟𝗘𝗦', '-metadata', 'Encoded by=', '-metadata', 'SYNOPSIS=', '-metadata', f'ARTIST=@𝗔𝗗𝗗𝗔_𝗙𝗜𝗟𝗘𝗦', '-metadata', 'PURL=', '-metadata', 'Encoded_by=', '-metadata', 'Description=', '-metadata', 'description=', '-metadata', f'SUMMARY={metadata}', '-metadata', 'WEBSITE=', '-metadata:s:a', f'title={metadata}',
+           '-metadata:s:s', f'title={metadata}', '-map', '0:v:0?', '-map', '0:a:?', '-map', '0:s:?', '-c:v', 'copy', '-c:a', 'copy', '-c:s',
+           'copy', outfile, '-y']
     listener.suproc = await create_subprocess_exec(*cmd, stderr=PIPE)
     code = await listener.suproc.wait()
     if code == 0:
@@ -75,4 +60,5 @@ async def edit_attachment(listener, base_dir: str, media_file: str, outfile: str
         await clean_target(outfile)
 
         LOGGER.error('%s. Changing failed, Path %s', await listener.suproc.stderr.read().decode(), media_file)
+
 

@@ -19,7 +19,6 @@ from socket import setdefaulttimeout
 from logging import getLogger, Formatter, FileHandler, StreamHandler, INFO, ERROR, basicConfig, error as log_error, info as log_info, warning as log_warning
 
 faulthandler_enable()
-install()
 setdefaulttimeout(600)
 
 pyroutils.MIN_CHAT_ID = -999999999999

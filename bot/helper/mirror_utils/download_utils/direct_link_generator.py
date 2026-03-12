@@ -5,7 +5,7 @@ from json import loads
 from os import path
 from uuid import uuid4
 from hashlib import sha256
-from time import sleep
+from time import sleep, time
 from re import findall, match, search
 
 from requests.adapters import HTTPAdapter
@@ -694,14 +694,19 @@ def gofile(url, auth):
         except Exception as e:
             raise e
 
-    def __fetch_links(session, _id, folderPath=""):
-        _url = f"https://api.gofile.io/contents/{_id}?wt=4fd6sg89d7s6&cache=true"
+    def __fetch_links(session, _id, folderPath="", retry=True):
+        _url = f"https://api.gofile.io/contents/{_id}?cache=true"
+        time_slot = int(time()) // 14400
+        raw = f"{user_agent}::en-US::{token}::{time_slot}::gf2026x"
+        wt = sha256(raw.encode()).hexdigest()
         headers = {
             "User-Agent": user_agent,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept": "*/*",
             "Connection": "keep-alive",
             "Authorization": "Bearer" + " " + token,
+            "X-Website-Token": wt,
+            "X-BL": "en-US"
         }
         if _password:
             _url += f"&password={_password}"
